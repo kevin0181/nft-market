@@ -9,9 +9,11 @@ import Caver from "caver-js";
 
 //컨트렉트 주소 0x8983dA5d7f24Cb0314332c038eC6Ee8c1DFF552b (Count.sol)
 
-const COUNT_COUNTRACT_ADRESS = '0x8983dA5d7f24Cb0314332c038eC6Ee8c1DFF552b';
+const COUNT_COUNTRACT_ADRESS = '0x8983dA5d7f24Cb0314332c038eC6Ee8c1DFF552b'; //contract address
 const ACCESS_KEY_ID = "KASKKBBA9XK2CNVHJRXNIVBY" //kas access key
-const SECRET_ACCESS_KEY = "q72Y3eh-qIcu-YmylbIvIOu27VNmJzFXgduUg2eJ";
+const SECRET_ACCESS_KEY = "q72Y3eh-qIcu-YmylbIvIOu27VNmJzFXgduUg2eJ"; //kas secret access key
+
+// contract abi
 const COUNT_ABI = [{
     "constant": true,
     "inputs": [],
