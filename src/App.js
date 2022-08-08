@@ -95,7 +95,7 @@ function App() {
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo"/>
                 <button title={'카운트 변경'} onClick={() => {
-                    setCount(100)
+                    setCount(202)
                 }}>카운트 변경
                 </button>
                 <p>
