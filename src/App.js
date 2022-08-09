@@ -20,7 +20,7 @@ function App() {
     }
 
     const onClickSetCount = () => {
-        KlipAPI.setCount(2000, setQrValue);
+        KlipAPI.setCount(1054, setQrValue);
     }
 
     return (
