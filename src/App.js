@@ -1,54 +1,56 @@
 import logo from './logo.svg';
 import './App.css';
+import './market.css';
 import {readCount, getBalance, setCount} from "./api/UseCaver";
 import QRCode from "qrcode.react";
 import {useState} from "react";
 import * as KlipAPI from "./api/UseKlip";
+import "bootstrap/dist/css/bootstrap.css"
+import {Alert, Container} from "react-bootstrap";
 
 
 const DEFAULT_QR_CODE = "DEFAULT";
+const DEFAULT_ADDRESS = "0x00000000000000000000000000";
 
 function App() {
 
-    // readCount();
-    // getBalance("0x27b0e5b4d3f72e8f26f4c58a5ee7b04516fb3034");
+    const [nfts, setNfts] = useState([]);
+
+    const [myBalance, setMyBalance] = useState("0");
+
+    const [myAddress, setMyAddress] = useState(DEFAULT_ADDRESS);
 
     const [qrValue, setQrValue] = useState(DEFAULT_QR_CODE);
 
-    const onClickGetAddress = () => { // 클릭시 klip 지갑의 주소를 가져옴
-        KlipAPI.getAddress(setQrValue);
-    }
 
-    const onClickSetCount = () => {
-        KlipAPI.setCount(1054, setQrValue);
+    /**
+     *  자기 주소와 잔고를 가져오는 함수
+     * */
+    const getUserData = () => {
+        KlipAPI.getAddress(setQrValue, async (address) => {
+            setMyAddress(address);
+
+            const _balance = await getBalance(address);
+
+            setMyBalance(_balance);
+        });
     }
 
     return (
         <div className="App">
-            <header className="App-header">
-                <button onClick={() => {
-                    onClickGetAddress();
-                }}>주소 가져오기
-                </button>
-                <button onClick={() => {
-                    onClickSetCount();
-                }}>카운트값 변경
-                </button>
+            <div style={{backgroundColor: "black", padding: 10}}>
+                <div style={{fontSize: 30, fontWeight: "bold", paddingLeft: 5, marginTop: 10}}>내지갑</div>
+                {myAddress}
                 <br/>
-                <br/>
-                <br/>
-                <QRCode value={qrValue}/>
-                <p>
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
+                <Alert
+                    onClick={getUserData}
+                    variant={"balance"} style={{backgroundColor: "#f40075", fontSize: 25}}>
+                    {myBalance}
+                </Alert>
+            </div>
+            <Container style={{backgroundColor: 'white', width: 300, height: 300, padding: 20}}>
+                <QRCode value={qrValue} size={256} style={{margin: "auto"}}/>
+            </Container>
         </div>
     );
 }

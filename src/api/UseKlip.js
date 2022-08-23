@@ -37,7 +37,7 @@ export const setCount = (count, setQrValue) => {
 
 }
 
-export const getAddress = (setQrValue) => {
+export const getAddress = (setQrValue, callback) => {
 
     axios.post('https://a2a-api.klipwallet.com/v2/a2a/prepare', {
         bapp: {
@@ -52,7 +52,8 @@ export const getAddress = (setQrValue) => {
         let timerId = setInterval(() => {
             axios.get(`https://a2a-api.klipwallet.com/v2/a2a/result?request_key=${request_key}`).then(res => {
                 if (res.data.result) {
-                    console.log(res.data.result);
+                    console.log(res.data.result.klaytn_address);
+                    callback(res.data.result.klaytn_address);
                     clearInterval(timerId);
                 }
             })
