@@ -1,12 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import './market.css';
-import {readCount, getBalance, setCount} from "./api/UseCaver";
+import {getBalance, fetchCardsOf} from "./api/UseCaver";
 import QRCode from "qrcode.react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import * as KlipAPI from "./api/UseKlip";
 import "bootstrap/dist/css/bootstrap.css"
-import {Alert, Container} from "react-bootstrap";
+import {Alert, CardImg, Card, Container, Image} from "react-bootstrap";
+import {MARKET_CONTRACT_ADDRESS} from "./constants";
 
 
 const DEFAULT_QR_CODE = "DEFAULT";
@@ -22,6 +23,33 @@ function App() {
 
     const [qrValue, setQrValue] = useState(DEFAULT_QR_CODE);
 
+    useEffect(() => {
+        fetchMyNFTs();
+    }, [])
+
+    useEffect(() => {
+        console.log(nfts);
+    }, [nfts]);
+
+
+    /**
+     * 마켓의 NFT들을 가지고옴
+     */
+    const fetchMarketNFTs = async () => {
+        const _nfts = await fetchCardsOf(MARKET_CONTRACT_ADDRESS);
+
+        setNfts(_nfts);
+    }
+
+
+    /**
+     * 본인의 NFT들을 가지고옴
+     */
+    const fetchMyNFTs = async () => {
+        const _nfts = await fetchCardsOf(myAddress);
+
+        setNfts(_nfts);
+    }
 
     /**
      *  자기 주소와 잔고를 가져오는 함수
@@ -47,6 +75,12 @@ function App() {
                     variant={"balance"} style={{backgroundColor: "#f40075", fontSize: 25}}>
                     {myBalance}
                 </Alert>
+                <div className={"container"} style={{padding: 0, width: "100%"}}>
+                    {nfts.map((nft, index) => (
+                        <CardImg key={index} className={"img-responsive"} src={nft.uri}/>
+                    ))}
+                </div>
+
             </div>
             <Container style={{backgroundColor: 'white', width: 300, height: 300, padding: 20}}>
                 <QRCode value={qrValue} size={256} style={{margin: "auto"}}/>
