@@ -9,6 +9,7 @@ import {
     NFT_CONTRACT_ADDRESS,
     MARKET_CONTRACT_ADDRESS
 } from "./../constants";
+import axios from "axios";
 
 const option = {
     headers: [{
@@ -38,14 +39,30 @@ export const fetchCardsOf = async (address) => {
 
     const tokenUris = [];
     for (let i = 0; i < balance; i++) {
-        const uri = await NFTContract.methods.tokenURI(tokenIds[i]).call();
-        tokenUris.push(uri);
+        // const uri = await NFTContract.methods.tokenURI(tokenIds[i]).call();
+        // tokenUris.push(uri);
+
+        const metadataUri = await NFTContract.methods.tokenURI(tokenIds[i]).call();
+        console.log(metadataUri)
+        const response = await axios.get(metadataUri).catch((e)=>{
+
+        });
+        if (response === undefined) {
+            const uri = await NFTContract.methods.tokenURI(tokenIds[i]).call();
+            tokenUris.push(uri);
+        } else {
+            const uriJSON = response.data
+            tokenUris.push(uriJSON.image);
+        }
+
     }
 
     const nfts = [];
     for (let i = 0; i < balance; i++) {
         nfts.push({uri: tokenUris[i], id: tokenIds[i]});
     }
+
+    console.log(nfts);
 
     return nfts;
 }
